@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PEVI — Plataforma Especializada em Vagas Inclusivas</title>
+  <meta name="description" content="Conectando talentos diversos a empresas inclusivas." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fraunces:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* =============================================
+       PEVI — DESIGN SYSTEM
+    ============================================= */
+    :root {
+      --primary: #2563EB;
+      --primary-dark: #1D4ED8;
+      --primary-light: #DBEAFE;
+      --secondary: #10B981;
+      --secondary-dark: #059669;
+      --accent: #F59E0B;
+      --accent-light: #FEF3C7;
+      --bg: #F8FAFF;
+      --bg-card: #FFFFFF;
+      --bg-nav: #FFFFFF;
+      --text: #1E293B;
+      --text-muted: #64748B;
+      --text-light: #94A3B8;
+      --border: #E2E8F0;
+      --shadow: 0 4px 24px rgba(37,99,235,0.08);
+      --shadow-lg: 0 8px 40px rgba(37,99,235,0.14);
+      --radius: 16px;
+      --radius-sm: 8px;
+      --radius-lg: 24px;
+      --font-scale: 1;
+    }
+
+    /* ALTO CONTRASTE */
+    [data-contrast="high"] {
+      --primary: #0000CC; --primary-dark: #00008B; --primary-light: #CCE0FF;
+      --secondary: #006600; --accent: #CC7700;
+      --bg: #FFFFFF; --bg-card: #FFFFFF; --bg-nav: #000000;
+      --text: #000000; --text-muted: #111111; --text-light: #333333;
+      --border: #000000; --shadow: 0 0 0 2px #000;
+    }
+    [data-contrast="high"] .nav-link,
+    [data-contrast="high"] .logo-text { color: #FFFFFF !important; }
+    [data-contrast="high"] * { border-color: #000 !important; }
+
+    /* DALTONISMO - Protanopia/Deuteranopia safe (blue-yellow palette) */
+    [data-colorblind="on"] {
+      --primary: #0077BB;
+      --primary-dark: #005588;
+      --primary-light: #CCE8FF;
+      --secondary: #EE7733;
+      --secondary-dark: #CC5511;
+      --accent: #AA3377;
+      --accent-light: #F5CCEE;
+    }
+    [data-colorblind="on"] .badge-green { background: #FFE0B2; color: #7A3B00; }
+    [data-colorblind="on"] .badge-blue  { background: #CCE8FF; color: #003366; }
+    [data-colorblind="on"] .badge-yellow { background: #F5CCEE; color: #660044; }
+
+    /* TEMA ESCURO */
+    [data-theme="dark"] {
+      --bg: #0F172A; --bg-card: #1E293B; --bg-nav: #0F172A;
+      --text: #F1F5F9; --text-muted: #94A3B8; --text-light: #64748B;
+      --border: #334155; --shadow: 0 4px 24px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
+      --primary-light: #1E3A5F; --accent-light: #3D2E00;
+    }
+
+    /* FONTE */
+    [data-font-size="small"]  { --font-scale: 0.875; }
+    [data-font-size="normal"] { --font-scale: 1; }
+    [data-font-size="large"]  { --font-scale: 1.2; }
+    [data-font-size="xlarge"] { --font-scale: 1.45; }
+
+    /* RESET */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: calc(16px * var(--font-scale)); scroll-behavior: smooth; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg); color: var(--text);
+      line-height: 1.6; overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* SKIP LINK */
+    .skip-link {
+      position: absolute; top: -100px; left: 1rem;
+      background: var(--primary); color: #fff;
+      padding: 0.75rem 1.5rem; border-radius: var(--radius-sm);
+      font-weight: 700; z-index: 9999; text-decoration: none;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 1rem; }
+
+    /* FOCUS */
+    *:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; border-radius: 4px; }
+
+    /* SR-ONLY */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    /* ---- NAVBAR ---- */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: var(--bg-nav); border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow); transition: background 0.3s, border-color 0.3s;
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;
+      height: 68px; display: flex; align-items: center;
+      justify-content: space-between; gap: 1rem;
+    }
+    .logo { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; cursor: pointer; }
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; color: #fff; font-weight: 900;
+      font-family: 'Fraunces', serif; flex-shrink: 0;
+    }
+    .logo-text { font-size: 1.4rem; font-weight: 900; color: var(--text); font-family: 'Fraunces', serif; line-height: 1; }
+    .logo-sub { font-size: 0.6rem; color: var(--text-muted); font-weight: 600; letter-spacing: 0.05em; display: block; }
+    .nav-links { display: flex; align-items: center; gap: 0.25rem; list-style: none; }
+    .nav-link {
+      color: var(--text); text-decoration: none; padding: 0.5rem 0.85rem;
+      border-radius: var(--radius-sm); font-weight: 600; font-size: 0.9rem;
+      transition: background 0.2s, color 0.2s; cursor: pointer; border: none; background: none;
+      font-family: 'Nunito', sans-serif;
+    }
+    .nav-link:hover, .nav-link.active { background: var(--primary-light); color: var(--primary); }
+    .nav-actions { display: flex; align-items: center; gap: 0.5rem; }
+    .btn-nav-outline {
+      background: transparent; border: 2px solid var(--primary); color: var(--primary);
+      padding: 0.4rem 1rem; border-radius: var(--radius-sm); font-weight: 700;
+      font-size: 0.85rem; cursor: pointer; transition: all 0.2s; font-family: 'Nunito', sans-serif;
+    }
+    .btn-nav-outline:hover { background: var(--primary); color: #fff; }
+    .btn-nav-primary {
+      background: var(--primary); border: 2px solid var(--primary); color: #fff;
+      padding: 0.4rem 1rem; border-radius: var(--radius-sm); font-weight: 700;
+      font-size: 0.85rem; cursor: pointer; transition: all 0.2s; font-family: 'Nunito', sans-serif;
+    }
+    .btn-nav-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+    .a11y-nav-btn {
+      background: var(--primary-light); border: 2px solid var(--primary);
+      color: var(--primary); width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1.1rem; transition: all 0.2s; flex-shrink: 0;
+    }
+    .a11y-nav-btn:hover { background: var(--primary); color: #fff; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 0.5rem; border-radius: var(--radius-sm); }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-nav {
+      display: none; position: fixed; top: 68px; left: 0; right: 0;
+      background: var(--bg-nav); border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem; z-index: 999; flex-direction: column; gap: 0.5rem;
+      box-shadow: var(--shadow-lg);
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav .nav-link { padding: 0.75rem 1rem; width: 100%; }
+
+    /* ---- PAGE LAYOUT ---- */
+    #page-container { padding-top: 68px; min-height: 100vh; }
+    .page { display: none; animation: fadeSlideIn 0.45s cubic-bezier(0.4,0,0.2,1) forwards; }
+    .page.active { display: block; }
+    @keyframes fadeSlideIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    .page-exit { animation: fadeSlideOut 0.25s cubic-bezier(0.4,0,0.2,1) forwards; }
+    @keyframes fadeSlideOut { from { opacity:1; transform:translateY(0); } to { opacity:0; transform:translateY(-12px); } }
+
+    /* ---- LAYOUT ---- */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+    .section { padding: 5rem 0; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 1.5rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.25rem; }
+
+    /* ---- BUTTONS ---- */
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 1.75rem; border-radius: var(--radius-sm);
+      font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 1rem;
+      cursor: pointer; transition: all 0.2s; border: 2px solid transparent; text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+    .btn-outline { background: transparent; color: var(--primary); border-color: var(--primary); }
+    .btn-outline:hover { background: var(--primary); color: #fff; transform: translateY(-1px); }
+    .btn-lg { padding: 1rem 2rem; font-size: 1.1rem; }
+
+    /* ---- CARDS ---- */
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.75rem; box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+
+    /* ---- BADGES ---- */
+    .badge {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.25rem 0.75rem; border-radius: 999px;
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em;
+    }
+    .badge-blue   { background: var(--primary-light); color: var(--primary); }
+    .badge-green  { background: #D1FAE5; color: #065F46; }
+    .badge-yellow { background: var(--accent-light); color: #92400E; }
+    .badge-purple { background: #EDE9FE; color: #5B21B6; }
+
+    /* ---- HERO ---- */
+    .hero {
+      min-height: calc(100vh - 68px); display: flex; align-items: center;
+      background: linear-gradient(135deg, var(--bg) 0%, var(--primary-light) 100%);
+      position: relative; overflow: hidden; padding: 4rem 0;
+    }
+    .hero::before {
+      content:''; position:absolute; top:-200px; right:-200px; width:600px; height:600px;
+      background: radial-gradient(circle, rgba(37,99,235,0.08) 0%, transparent 70%);
+      border-radius:50%; pointer-events:none;
+    }
+    .hero-content {
+      max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; position: relative; z-index: 1;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--primary-light); color: var(--primary);
+      padding: 0.4rem 1rem; border-radius: 999px; font-size: 0.85rem;
+      font-weight: 700; margin-bottom: 1.25rem;
+    }
+    .hero-title { font-family: 'Fraunces', serif; font-size: clamp(2rem,4vw,3.2rem); font-weight: 700; line-height: 1.15; color: var(--text); margin-bottom: 1.25rem; }
+    .hero-title span { color: var(--primary); }
+    .hero-desc { font-size: 1.1rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 2rem; }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .hero-stats { display: flex; gap: 2rem; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+    .hero-stat-num { font-size: 1.75rem; font-weight: 900; color: var(--primary); font-family: 'Fraunces', serif; line-height: 1; }
+    .hero-stat-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; margin-top: 0.25rem; }
+    .hero-visual { position: relative; }
+    .hero-card-float { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow-lg); }
+    .hero-card-tag { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
+    .job-preview {
+      display: flex; align-items: flex-start; gap: 1rem; padding: 1rem;
+      border-radius: var(--radius-sm); border: 1px solid var(--border); margin-bottom: 0.75rem;
+      transition: background 0.2s; cursor: pointer;
+    }
+    .job-preview:hover { background: var(--primary-light); }
+    .job-logo { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .job-title { font-weight: 700; font-size: 0.9rem; color: var(--text); }
+    .job-company { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.1rem; }
+    .job-tags { display: flex; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.5rem; }
+    .float-badge {
+      position: absolute; background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 0.5rem 0.85rem; box-shadow: var(--shadow-lg);
+      display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; font-weight: 700;
+      animation: float 4s ease-in-out infinite;
+    }
+    .float-badge-1 { top: -20px; right: -20px; color: var(--secondary); }
+    .float-badge-2 { bottom: -10px; left: -20px; color: var(--primary); }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+    /* ---- SECTION HEADINGS ---- */
+    .section-label { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--primary); margin-bottom: 0.5rem; }
+    .section-title { font-family: 'Fraunces', serif; font-size: clamp(1.6rem,3vw,2.4rem); font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 1rem; }
+    .section-desc { font-size: 1.05rem; color: var(--text-muted); max-width: 580px; }
+    .feature-icon { width: 52px; height: 52px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.1rem; flex-shrink: 0; }
+
+    /* ---- JOB CARDS ---- */
+    .job-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow);
+      transition: all 0.2s; cursor: pointer; position: relative; overflow: hidden;
+    }
+    .job-card::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--primary); opacity:0; transition:opacity 0.2s; }
+    .job-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .job-card:hover::before { opacity: 1; }
+    .job-card-header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
+    .job-card-logo { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; background: var(--bg); border: 1px solid var(--border); flex-shrink: 0; }
+    .job-card-name { font-weight: 800; font-size: 1rem; color: var(--text); margin-bottom: 0.2rem; }
+    .job-card-company { font-size: 0.85rem; color: var(--text-muted); }
+    .job-card-meta { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem; font-size: 0.82rem; color: var(--text-muted); }
+    .job-card-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem; }
+    .job-card-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+
+    /* ---- SEARCH ---- */
+    .search-bar {
+      background: var(--bg-card); border: 2px solid var(--border); border-radius: var(--radius);
+      padding: 1.25rem 1.5rem; display: flex; gap: 1rem; align-items: center;
+      box-shadow: var(--shadow); flex-wrap: wrap; margin-bottom: 2rem; transition: border-color 0.2s;
+    }
+    .search-bar:focus-within { border-color: var(--primary); }
+    .search-input-wrap { display: flex; align-items: center; gap: 0.6rem; flex: 1; min-width: 200px; }
+    .search-input { border: none; background: none; font-family: 'Nunito', sans-serif; font-size: 1rem; color: var(--text); width: 100%; outline: none; }
+    .search-input::placeholder { color: var(--text-light); }
+    .search-divider { width: 1px; height: 24px; background: var(--border); flex-shrink: 0; }
+    .filter-chips { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .filter-chip {
+      padding: 0.4rem 0.9rem; border-radius: 999px; border: 2px solid var(--border);
+      background: var(--bg-card); font-family: 'Nunito', sans-serif;
+      font-size: 0.85rem; font-weight: 600; color: var(--text); cursor: pointer; transition: all 0.2s;
+    }
+    .filter-chip:hover { border-color: var(--primary); color: var(--primary); }
+    .filter-chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    /* ---- FORM ---- */
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.25rem; }
+    .form-label { font-weight: 700; font-size: 0.9rem; color: var(--text); }
+    .form-input, .form-select, .form-textarea {
+      padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: var(--radius-sm);
+      background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif;
+      font-size: 1rem; transition: border-color 0.2s, box-shadow 0.2s; width: 100%;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.15); outline: none;
+    }
+    .form-textarea { resize: vertical; min-height: 120px; }
+
+    /* ---- MODAL ---- */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 3000;
+      display: flex; align-items: center; justify-content: center; padding: 1rem;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal {
+      background: var(--bg-card); border-radius: var(--radius-lg); padding: 2rem;
+      max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto;
+      box-shadow: var(--shadow-lg); transform: translateY(30px); transition: transform 0.3s;
+    }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+    .modal-title { font-size: 1.2rem; font-weight: 800; color: var(--text); }
+    .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); padding: 0.25rem; border-radius: 4px; line-height: 1; }
+
+    /* ---- TOAST ---- */
+    .toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 5000; display: flex; flex-direction: column; gap: 0.75rem; }
+    .toast {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem; box-shadow: var(--shadow-lg); display: flex; align-items: center;
+      gap: 0.75rem; min-width: 280px; animation: toastIn 0.3s ease forwards;
+    }
+    @keyframes toastIn { from { opacity:0; transform:translateX(40px); } to { opacity:1; transform:translateX(0); } }
+    .toast.success { border-left: 4px solid var(--secondary); }
+    .toast.error   { border-left: 4px solid #EF4444; }
+    .toast.info    { border-left: 4px solid var(--primary); }
+
+    /* ---- ACCESSIBILITY PANEL ---- */
+    .a11y-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1999;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .a11y-overlay.open { opacity: 1; pointer-events: all; }
+    .a11y-panel {
+      position: fixed; right: -360px; top: 0; bottom: 0; width: 340px;
+      background: var(--bg-card); border-left: 1px solid var(--border);
+      box-shadow: -8px 0 40px rgba(0,0,0,0.15); z-index: 2000;
+      transition: right 0.35s cubic-bezier(0.4,0,0.2,1); overflow-y: auto;
+      padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem;
+    }
+    .a11y-panel.open { right: 0; }
+    .a11y-header { display: flex; align-items: center; justify-content: space-between; }
+    .a11y-title { font-size: 1.1rem; font-weight: 800; color: var(--text); }
+    .a11y-close { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted); padding: 0.25rem; border-radius: 4px; line-height: 1; }
+    .a11y-section-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .a11y-group { display: flex; flex-direction: column; gap: 0.5rem; }
+    .a11y-toggle {
+      display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm); border: 2px solid var(--border);
+      background: var(--bg); cursor: pointer; transition: all 0.2s;
+      font-family: 'Nunito', sans-serif; font-weight: 600; font-size: 0.9rem;
+      color: var(--text); width: 100%; text-align: left;
+    }
+    .a11y-toggle:hover { border-color: var(--primary); background: var(--primary-light); }
+    .a11y-toggle.active { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+    .a11y-toggle .a11y-icon { font-size: 1.2rem; flex-shrink: 0; }
+    .a11y-toggle .toggle-state {
+      margin-left: auto; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.05em;
+      padding: 0.15rem 0.4rem; border-radius: 4px; background: var(--border); color: var(--text-muted);
+    }
+    .a11y-toggle.active .toggle-state { background: var(--primary); color: #fff; }
+    .font-size-controls { display: flex; gap: 0.5rem; }
+    .font-btn {
+      flex: 1; padding: 0.6rem; border-radius: var(--radius-sm); border: 2px solid var(--border);
+      background: var(--bg); cursor: pointer; font-family: 'Nunito', sans-serif;
+      font-weight: 700; color: var(--text); transition: all 0.2s;
+    }
+    .font-btn:hover { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+    .font-btn.active { border-color: var(--primary); background: var(--primary); color: #fff; }
+    .a11y-reset {
+      margin-top: auto; padding: 0.75rem; border-radius: var(--radius-sm);
+      border: 2px solid var(--border); background: transparent; cursor: pointer;
+      font-family: 'Nunito', sans-serif; font-weight: 700; color: var(--text-muted);
+      transition: all 0.2s; font-size: 0.9rem;
+    }
+    .a11y-reset:hover { border-color: #EF4444; color: #EF4444; }
+
+    /* ---- TTS SPEAK BUTTON ---- */
+    .speak-btn {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      background: var(--primary-light); border: 1.5px solid var(--primary);
+      color: var(--primary); padding: 0.25rem 0.65rem; border-radius: 999px;
+      font-size: 0.72rem; font-weight: 700; cursor: pointer;
+      font-family: 'Nunito', sans-serif; transition: all 0.18s;
+      margin-top: 0.5rem; letter-spacing: 0.03em;
+    }
+    .speak-btn:hover { background: var(--primary); color: #fff; }
+    .speak-btn.speaking { background: #FEF3C7; border-color: var(--accent); color: #92400E; animation: speakPulse 1s ease-in-out infinite; }
+    @keyframes speakPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.4); } 50% { box-shadow: 0 0 0 6px rgba(245,158,11,0); } }
+
+    /* TTS wrapper */
+    .tts-wrap { display: flex; flex-direction: column; gap: 0.3rem; }
+
+    /* ---- STEPS (modal) ---- */
+    .steps { display: flex; gap: 0; margin-bottom: 2rem; }
+    .step { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
+    .step:not(:last-child)::after { content:''; position:absolute; top:20px; left:50%; width:100%; height:2px; background:var(--border); z-index:0; }
+    .step-circle { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--border); background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; color: var(--text-muted); z-index: 1; position: relative; transition: all 0.3s; }
+    .step.active .step-circle { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .step-label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-top: 0.5rem; text-align: center; }
+    .step.active .step-label { color: var(--primary); }
+
+    /* ---- AVATAR ---- */
+    .avatar { border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--primary); flex-shrink: 0; }
+
+    /* ---- DIVIDER ---- */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+
+    /* ---- FOOTER ---- */
+    footer { background: #1E293B; color: #94A3B8; padding: 4rem 0 2rem; }
+    [data-theme="dark"] footer { background: #020617; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+    .footer-logo-text { color: #F1F5F9; font-size: 1.3rem; font-weight: 900; font-family: 'Fraunces', serif; }
+    .footer-desc { font-size: 0.9rem; line-height: 1.7; margin: 0.75rem 0 1.25rem; }
+    .footer-heading { color: #F1F5F9; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.05em; margin-bottom: 1rem; }
+    .footer-links { display: flex; flex-direction: column; gap: 0.6rem; list-style: none; }
+    .footer-link { color: #94A3B8; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; cursor: pointer; background: none; border: none; font-family: 'Nunito', sans-serif; text-align: left; padding: 0; }
+    .footer-link:hover { color: #F1F5F9; }
+    .footer-bottom { border-top: 1px solid #334155; padding-top: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; font-size: 0.85rem; }
+    .footer-badges { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .footer-badge { background: #334155; color: #94A3B8; padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+
+    /* ---- UTILITY ---- */
+    .text-center { text-align: center; }
+    .text-muted { color: var(--text-muted); }
+    .mb-2 { margin-bottom: 1rem; }
+    .mb-3 { margin-bottom: 1.5rem; }
+    .mb-4 { margin-bottom: 2rem; }
+    .mt-2 { margin-top: 1rem; }
+    .gap-1 { gap: 0.5rem; }
+    .flex { display: flex; }
+    .flex-wrap { flex-wrap: wrap; }
+    .align-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+
+    /* ---- ANIMATIONS ---- */
+    .animate-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .animate-in.visible { opacity: 1; transform: translateY(0); }
+    .animate-in:nth-child(2) { transition-delay: 0.1s; }
+    .animate-in:nth-child(3) { transition-delay: 0.2s; }
+    .animate-in:nth-child(4) { transition-delay: 0.3s; }
+
+    /* ---- DYSLEXIA ---- */
+    [data-dyslexia="on"] body,
+    [data-dyslexia="on"] input,
+    [data-dyslexia="on"] button,
+    [data-dyslexia="on"] textarea {
+      font-family: 'Comic Sans MS', 'Trebuchet MS', cursive !important;
+      letter-spacing: 0.05em; word-spacing: 0.15em; line-height: 1.9 !important;
+    }
+
+    /* ---- REDUCED MOTION ---- */
+    [data-motion="reduced"] *, [data-motion="reduced"] *::before, [data-motion="reduced"] *::after {
+      animation-duration: 0.01ms !important; transition-duration: 0.1ms !important;
+    }
+
+    /* ---- LINK UNDERLINE ---- */
+    [data-links="underline"] a { text-decoration: underline !important; }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 968px) {
+      .nav-links, .nav-actions { display: none; }
+      .hamburger { display: flex; }
+      .hero-content { grid-template-columns: 1fr; gap: 2rem; }
+      .hero-visual { display: none; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .grid-3 { grid-template-columns: repeat(2,1fr); }
+      .grid-4 { grid-template-columns: repeat(2,1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    }
+    @media (max-width: 600px) {
+      .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-stats { flex-wrap: wrap; gap: 1rem; }
+      .section { padding: 3rem 0; }
+      .a11y-panel { width: 100%; right: -100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+  <div id="sr-announce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" role="navigation" aria-label="Navegação principal">
+    <div class="nav-inner">
+      <a class="logo" onclick="navigate('home')" role="button" tabindex="0" aria-label="PEVI - Página inicial">
+        <div class="logo-icon" aria-hidden="true">P</div>
+        <div>
+          <span class="logo-text">PEVI</span>
+          <span class="logo-sub">Vagas Inclusivas</span>
+        </div>
+      </a>
+      <ul class="nav-links" role="list">
+        <li><button class="nav-link active" data-nav="home" onclick="navigate('home')">Início</button></li>
+        <li><button class="nav-link" data-nav="vagas" onclick="navigate('vagas')">Vagas</button></li>
+        <li><button class="nav-link" data-nav="empresas" onclick="navigate('empresas')">Empresas</button></li>
+        <li><button class="nav-link" data-nav="sobre" onclick="navigate('sobre')">Sobre</button></li>
+        <li><button class="nav-link" data-nav="contato" onclick="navigate('contato')">Contato</button></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-nav-outline" onclick="navigate('vagas')">Buscar Vagas</button>
+        <button class="btn-nav-primary" onclick="openModal('cadastro')">Cadastrar</button>
+        <button class="a11y-nav-btn" onclick="openA11yPanel()" aria-label="Abrir painel de acessibilidade" title="Acessibilidade">♿</button>
+      </div>
+      <button class="hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Menu mobile">
+    <button class="nav-link" data-nav="home" onclick="navigate('home');toggleMobileNav()">🏠 Início</button>
+    <button class="nav-link" data-nav="vagas" onclick="navigate('vagas');toggleMobileNav()">💼 Vagas</button>
+    <button class="nav-link" data-nav="empresas" onclick="navigate('empresas');toggleMobileNav()">🏢 Empresas</button>
+    <button class="nav-link" data-nav="sobre" onclick="navigate('sobre');toggleMobileNav()">ℹ️ Sobre</button>
+    <button class="nav-link" data-nav="contato" onclick="navigate('contato');toggleMobileNav()">📬 Contato</button>
+    <hr style="border-color:var(--border);margin:0.5rem 0;" />
+    <button class="btn btn-primary" onclick="openModal('cadastro');toggleMobileNav()">Cadastrar Gratuitamente</button>
+  </nav>
+
+  <!-- ===== PAGES ===== -->
+  <div id="page-container">
+    <main id="main-content">
+
+      <!-- ===== HOME ===== -->
+      <div class="page active" id="page-home">
+
+        <!-- HERO -->
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-content">
+            <div class="hero-text">
+              <div class="hero-eyebrow" aria-hidden="true"><span>✨</span> Plataforma 100% Inclusiva</div>
+              <h1 class="hero-title" id="hero-title">
+                Encontre sua vaga com <span>dignidade e acessibilidade</span>
+              </h1>
+              <div class="tts-wrap">
+                <p class="hero-desc" id="hero-desc">
+                  O PEVI conecta pessoas com deficiência, neurodivergentes e outros talentos diversos a empresas verdadeiramente comprometidas com a inclusão.
+                </p>
+                <button class="speak-btn" onclick="speakElement('hero-desc')" aria-label="Ouvir descrição">🔊 Ouvir</button>
+              </div>
+              <div class="hero-actions" style="margin-top:1.5rem;">
+                <button class="btn btn-primary btn-lg" onclick="navigate('vagas')">💼 Ver Vagas</button>
+                <button class="btn btn-outline btn-lg" onclick="navigate('sobre')">Como Funciona</button>
+              </div>
+              <div class="hero-stats" role="list" aria-label="Números do PEVI">
+                <div role="listitem">
+                  <div class="hero-stat-num" data-target="1240" data-suffix="+" aria-label="1240 ou mais vagas ativas">0</div>
+                  <div class="hero-stat-label">Vagas Ativas</div>
+                </div>
+                <div role="listitem">
+                  <div class="hero-stat-num" data-target="320" data-suffix="+" aria-label="320 ou mais empresas parceiras">0</div>
+                  <div class="hero-stat-label">Empresas Parceiras</div>
+                </div>
+                <div role="listitem">
+                  <div class="hero-stat-num" data-target="8700" data-suffix="+" aria-label="8700 ou mais contratações">0</div>
+                  <div class="hero-stat-label">Contratações</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-visual" aria-hidden="true">
+              <div class="hero-card-float">
+                <div class="hero-card-tag">
+                  <span class="badge badge-green">✅ Vaga Inclusiva</span>
+                  <span class="badge badge-blue">🌟 Destaque</span>
+                </div>
+                <div class="job-preview">
+                  <div class="job-logo" style="background:#DBEAFE;">💻</div>
+                  <div>
+                    <div class="job-title">Dev Frontend Sênior</div>
+                    <div class="job-company">TechBrasil · Remoto</div>
+                    <div class="job-tags"><span class="badge badge-blue">PcD</span><span class="badge badge-purple">Home Office</span></div>
+                  </div>
+                </div>
+                <div class="job-preview">
+                  <div class="job-logo" style="background:#D1FAE5;">🎨</div>
+                  <div>
+                    <div class="job-title">Designer UX/UI</div>
+                    <div class="job-company">Criativa Studio · SP</div>
+                    <div class="job-tags"><span class="badge badge-green">Neurodiversidade</span><span class="badge badge-yellow">Híbrido</span></div>
+                  </div>
+                </div>
+                <div class="job-preview">
+                  <div class="job-logo" style="background:#FEF3C7;">📊</div>
+                  <div>
+                    <div class="job-title">Analista de Dados</div>
+                    <div class="job-company">DataMind · RJ</div>
+                    <div class="job-tags"><span class="badge badge-blue">PcD</span><span class="badge badge-purple">Remoto</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="float-badge float-badge-1">✅ +48 vagas hoje</div>
+              <div class="float-badge float-badge-2">🤝 Empresas verificadas</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- COMO FUNCIONA -->
+        <section class="section" aria-labelledby="como-funciona-title">
+          <div class="container">
+            <div class="text-center mb-4 animate-in">
+              <div class="section-label">Como Funciona</div>
+              <h2 class="section-title" id="como-funciona-title">Simples, rápido e acessível</h2>
+              <div class="tts-wrap" style="align-items:center;">
+                <p class="section-desc" style="margin:0 auto;" id="como-desc">Em apenas 3 passos você está conectado a oportunidades reais de emprego adaptadas para você.</p>
+                <button class="speak-btn" onclick="speakElement('como-desc')" aria-label="Ouvir descrição">🔊 Ouvir</button>
+              </div>
+            </div>
+            <div class="grid-3">
+              <div class="card text-center animate-in">
+                <div class="feature-icon" style="background:#DBEAFE;margin:0 auto 1rem;" aria-hidden="true">📝</div>
+                <h3 style="font-weight:800;margin-bottom:0.5rem;" id="step1-h">1. Crie seu perfil</h3>
+                <div class="tts-wrap" style="align-items:center;">
+                  <p class="text-muted" id="step1-p">Cadastre-se gratuitamente e informe suas habilidades, necessidades de acessibilidade e preferências de trabalho.</p>
+                  <button class="speak-btn" onclick="speakElement('step1-p')" aria-label="Ouvir passo 1">🔊 Ouvir</button>
+                </div>
+              </div>
+              <div class="card text-center animate-in">
+                <div class="feature-icon" style="background:#D1FAE5;margin:0 auto 1rem;" aria-hidden="true">🔍</div>
+                <h3 style="font-weight:800;margin-bottom:0.5rem;">2. Encontre vagas</h3>
+                <div class="tts-wrap" style="align-items:center;">
+                  <p class="text-muted" id="step2-p">Use nossos filtros de acessibilidade para encontrar vagas que combinam com seu perfil e necessidades específicas.</p>
+                  <button class="speak-btn" onclick="speakElement('step2-p')" aria-label="Ouvir passo 2">🔊 Ouvir</button>
+                </div>
+              </div>
+              <div class="card text-center animate-in">
+                <div class="feature-icon" style="background:#FEF3C7;margin:0 auto 1rem;" aria-hidden="true">🚀</div>
+                <h3 style="font-weight:800;margin-bottom:0.5rem;">3. Candidate-se</h3>
+                <div class="tts-wrap" style="align-items:center;">
+                  <p class="text-muted" id="step3-p">Envie sua candidatura com um clique. Empresas verificadas recebem seu currículo e entram em contato com você.</p>
+                  <button class="speak-btn" onclick="speakElement('step3-p')" aria-label="Ouvir passo 3">🔊 Ouvir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FUNCIONALIDADES -->
+        <section class="section" style="background:var(--primary-light);" aria-labelledby="features-title">
+          <div class="container">
+            <div class="text-center mb-4 animate-in">
+              <div class="section-label">Diferenciais</div>
+              <h2 class="section-title" id="features-title">Feito para todas as pessoas</h2>
+            </div>
+            <div class="grid-4">
+              <div class="card animate-in">
+                <div class="feature-icon" style="background:#DBEAFE;" aria-hidden="true">♿</div>
+                <h3 style="font-weight:800;margin-bottom:0.5rem;font-size:1rem;">Vagas PcD</h3>
+                <div class="tts-wrap">
+                  <p class="text-muted" style="font-size:0.9rem;" id="feat1-p">Vagas exclusivas para Pessoas com Deficiência, com adaptações descritas em detalhes.</p>
+                  <button class="speak-btn" onclick="speakElement('feat1-p')" aria-label="Ouvir sobre vagas PcD">🔊 Ouvir</button>
+                </div>
+              </div>
+              <div class="card animate-in">
+                <div class="feature-icon" style="background:#EDE9FE;" aria-hidden="true">🧠</div>
+                <h3 style="font-weight:800;margin-bottom:0.5rem;font-size:1rem;">Neurodiversidade</h3>
+                <div class="tts-wrap">
+                  <p class="text-muted" style="font-size:0.9rem;" id="feat2-p">Empresas abertas a autistas, TDAH, dislexia e outras formas de neurodivergência.</p>
+                  <button class="speak-btn" onclick="speakElement('feat2-p')" aria-label="Ouvir sobre neurodiversidade">🔊 Ouvir</button>
+                </div>
+              </div>
+              <div class="card animate-in">
+                <div class="feature-icon" style="background:#D1FAE5;" aria-hidden="true">🔊</div>
+                <h3 style="font-weight:800;margin-bottom:0.5rem;font-size:1rem;">Leitura de Tela</h3>
+                <div class="tts-wrap">
+                  <p class="text-muted" style="font-size:0.9rem;" id="feat3-p">Compatível com leitores de tela e com TTS integrado para maior independência.</p>
+                  <button class="speak-btn" onclick="speakElement('feat3-p')" aria-label="Ouvir sobre leitura de tela">🔊 Ouvir</button>
+                </div>
+              </div>
+              <div class="card animate-in">
+                <div class="feature-icon" style="background:#FEF3C7;" aria-hidden="true">🌗</div>
+                <h3 style="font-weight:800;margin-bottom:0.5rem;font-size:1rem;">Alto Contraste</h3>
+                <div class="tts-wrap">
+                  <p class="text-muted" style="font-size:0.9rem;" id="feat4-p">Modo escuro, alto contraste, paleta para daltonismo e tamanhos ajustáveis de texto.</p>
+                  <button class="speak-btn" onclick="speakElement('feat4-p')" aria-label="Ouvir sobre alto contraste">🔊 Ouvir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VAGAS DESTAQUE -->
+        <section class="section" aria-labelledby="vagas-destaque-title">
+          <div class="container">
+            <div class="flex align-center justify-between mb-4 animate-in" style="flex-wrap:wrap;gap:1rem;">
+              <div>
+                <div class="section-label">Vagas em Destaque</div>
+                <h2 class="section-title" id="vagas-destaque-title">Oportunidades recentes</h2>
+              </div>
+              <button class="btn btn-outline" onclick="navigate('vagas')">Ver Todas →</button>
+            </div>
+            <div class="grid-3">
+              <article class="job-card animate-in" onclick="openModal('vaga1')" aria-labelledby="vaga1h">
+                <div class="job-card-header">
+                  <div class="job-card-logo" aria-hidden="true">💻</div>
+                  <div><div class="job-card-name" id="vaga1h">Dev Frontend Sênior</div><div class="job-card-company">TechBrasil S.A.</div></div>
+                </div>
+                <div class="job-card-meta"><span>📍 Remoto</span><span>💰 R$ 8k–12k</span><span>⏱️ CLT</span></div>
+                <div class="tts-wrap">
+                  <p class="job-card-desc" id="vaga1-desc">Desenvolvimento de interfaces acessíveis com React. Empresa com cultura inclusiva e suporte completo a PcD.</p>
+                  <button class="speak-btn" onclick="event.stopPropagation();speakElement('vaga1-desc')" aria-label="Ouvir sobre esta vaga">🔊 Ouvir</button>
+                </div>
+                <div class="job-card-footer">
+                  <div class="flex gap-1 flex-wrap"><span class="badge badge-blue">PcD</span><span class="badge badge-purple">React</span></div>
+                  <span class="text-muted" style="font-size:0.8rem;">há 2 dias</span>
+                </div>
+              </article>
+              <article class="job-card animate-in" onclick="openModal('vaga2')" aria-labelledby="vaga2h">
+                <div class="job-card-header">
+                  <div class="job-card-logo" aria-hidden="true">🎨</div>
+                  <div><div class="job-card-name" id="vaga2h">Designer UX/UI Pleno</div><div class="job-card-company">Criativa Studio</div></div>
+                </div>
+                <div class="job-card-meta"><span>📍 São Paulo · Híbrido</span><span>💰 R$ 5k–7,5k</span></div>
+                <div class="tts-wrap">
+                  <p class="job-card-desc" id="vaga2-desc">Criação de experiências digitais inclusivas. Buscamos designers neurodivergentes que tragam perspectivas únicas.</p>
+                  <button class="speak-btn" onclick="event.stopPropagation();speakElement('vaga2-desc')" aria-label="Ouvir sobre esta vaga">🔊 Ouvir</button>
+                </div>
+                <div class="job-card-footer">
+                  <div class="flex gap-1 flex-wrap"><span class="badge badge-green">Neurodiversidade</span><span class="badge badge-yellow">Figma</span></div>
+                  <span class="text-muted" style="font-size:0.8rem;">há 3 dias</span>
+                </div>
+              </article>
+              <article class="job-card animate-in" onclick="openModal('vaga3')" aria-labelledby="vaga3h">
+                <div class="job-card-header">
+                  <div class="job-card-logo" aria-hidden="true">📊</div>
+                  <div><div class="job-card-name" id="vaga3h">Analista de Dados</div><div class="job-card-company">DataMind Analytics</div></div>
+                </div>
+                <div class="job-card-meta"><span>📍 Rio de Janeiro · Remoto</span><span>💰 R$ 6k–9k</span></div>
+                <div class="tts-wrap">
+                  <p class="job-card-desc" id="vaga3-desc">Análise de dados e geração de insights. Empresa 100% acessível com intérprete de LIBRAS em reuniões.</p>
+                  <button class="speak-btn" onclick="event.stopPropagation();speakElement('vaga3-desc')" aria-label="Ouvir sobre esta vaga">🔊 Ouvir</button>
+                </div>
+                <div class="job-card-footer">
+                  <div class="flex gap-1 flex-wrap"><span class="badge badge-blue">PcD</span><span class="badge badge-purple">Python</span></div>
+                  <span class="text-muted" style="font-size:0.8rem;">há 5 dias</span>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- DEPOIMENTOS -->
+        <section class="section" style="background:var(--bg-card);" aria-labelledby="dep-title">
+          <div class="container">
+            <div class="text-center mb-4 animate-in">
+              <div class="section-label">Depoimentos</div>
+              <h2 class="section-title" id="dep-title">Histórias reais de superação</h2>
+            </div>
+            <div class="grid-3">
+              <blockquote class="card animate-in">
+                <div class="tts-wrap">
+                  <p style="font-size:1rem;line-height:1.7;margin-bottom:1.25rem;color:var(--text);" id="dep1">"O PEVI foi o único lugar onde me senti respeitado como profissional. Consegui meu emprego em menos de 2 semanas!"</p>
+                  <button class="speak-btn" onclick="speakElement('dep1')" aria-label="Ouvir depoimento">🔊 Ouvir</button>
+                </div>
+                <footer class="flex align-center gap-1" style="margin-top:1rem;">
+                  <div class="avatar" style="width:44px;height:44px;font-size:1rem;" aria-hidden="true">CR</div>
+                  <div><div style="font-weight:700;font-size:0.9rem;">Carlos R.</div><div class="text-muted" style="font-size:0.8rem;">Dev Backend · Usuário de cadeira de rodas</div></div>
+                </footer>
+              </blockquote>
+              <blockquote class="card animate-in">
+                <div class="tts-wrap">
+                  <p style="font-size:1rem;line-height:1.7;margin-bottom:1.25rem;color:var(--text);" id="dep2">"Como autista, sempre tive dificuldade em processos seletivos tradicionais. Aqui as empresas já sabem e se adaptam."</p>
+                  <button class="speak-btn" onclick="speakElement('dep2')" aria-label="Ouvir depoimento">🔊 Ouvir</button>
+                </div>
+                <footer class="flex align-center gap-1" style="margin-top:1rem;">
+                  <div class="avatar" style="width:44px;height:44px;font-size:1rem;" aria-hidden="true">AM</div>
+                  <div><div style="font-weight:700;font-size:0.9rem;">Ana M.</div><div class="text-muted" style="font-size:0.8rem;">Analista de TI · Autista</div></div>
+                </footer>
+              </blockquote>
+              <blockquote class="card animate-in">
+                <div class="tts-wrap">
+                  <p style="font-size:1rem;line-height:1.7;margin-bottom:1.25rem;color:var(--text);" id="dep3">"A plataforma tem recursos de acessibilidade que nenhum outro site de vagas tem. O botão Ouvir fez toda a diferença para mim."</p>
+                  <button class="speak-btn" onclick="speakElement('dep3')" aria-label="Ouvir depoimento">🔊 Ouvir</button>
+                </div>
+                <footer class="flex align-center gap-1" style="margin-top:1rem;">
+                  <div class="avatar" style="width:44px;height:44px;font-size:1rem;" aria-hidden="true">JP</div>
+                  <div><div style="font-weight:700;font-size:0.9rem;">João P.</div><div class="text-muted" style="font-size:0.8rem;">Designer · Deficiente Visual</div></div>
+                </footer>
+              </blockquote>
+            </div>
+          </div>
+        </section>
+
+        <!-- CTA FINAL -->
+        <section class="section" style="background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);" aria-labelledby="cta-title">
+          <div class="container text-center">
+            <div class="animate-in">
+              <h2 class="section-title" id="cta-title" style="color:#fff;margin-bottom:1rem;">Pronto para começar sua jornada?</h2>
+              <p style="color:rgba(255,255,255,0.85);font-size:1.1rem;margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto;">Cadastre-se gratuitamente e acesse centenas de vagas inclusivas agora mesmo.</p>
+              <div class="flex align-center gap-1" style="justify-content:center;flex-wrap:wrap;">
+                <button class="btn" style="background:#fff;color:var(--primary);border-color:#fff;" onclick="openModal('cadastro')">Criar Conta Grátis</button>
+                <button class="btn" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.5);" onclick="navigate('vagas')">Explorar Vagas</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- /home -->
+
+      <!-- ===== VAGAS ===== -->
+      <div class="page" id="page-vagas">
+        <section class="section">
+          <div class="container">
+            <div class="mb-4 animate-in">
+              <div class="section-label">Oportunidades</div>
+              <h1 class="section-title">Vagas Disponíveis</h1>
+              <p><span id="jobs-count" aria-live="polite" aria-atomic="true">6 vagas encontradas</span></p>
+            </div>
+            <div class="search-bar" role="search" aria-label="Busca de vagas">
+              <div class="search-input-wrap">
+                <span aria-hidden="true">🔍</span>
+                <input type="search" id="search-jobs" class="search-input" placeholder="Cargo, empresa ou habilidade..." oninput="filterJobs()" aria-label="Buscar vagas" />
+              </div>
+              <div class="search-divider" aria-hidden="true"></div>
+              <div class="search-input-wrap">
+                <span aria-hidden="true">📍</span>
+                <input type="text" class="search-input" placeholder="Cidade ou Remoto" aria-label="Localização" />
+              </div>
+              <button class="btn btn-primary" aria-label="Buscar">Buscar</button>
+            </div>
+            <div class="filter-chips" role="group" aria-label="Filtros de categoria">
+              <button class="filter-chip active" data-filter="all" onclick="setFilter(this,'all')">Todas</button>
+              <button class="filter-chip" data-filter="pcd" onclick="setFilter(this,'pcd')">♿ PcD</button>
+              <button class="filter-chip" data-filter="neuro" onclick="setFilter(this,'neuro')">🧠 Neurodiversidade</button>
+              <button class="filter-chip" data-filter="remoto" onclick="setFilter(this,'remoto')">🏠 Remoto</button>
+              <button class="filter-chip" data-filter="hibrido" onclick="setFilter(this,'hibrido')">🏢 Híbrido</button>
+              <button class="filter-chip" data-filter="ti" onclick="setFilter(this,'ti')">💻 TI</button>
+              <button class="filter-chip" data-filter="design" onclick="setFilter(this,'design')">🎨 Design</button>
+            </div>
+            <div class="grid-2" id="jobs-grid">
+              <article class="job-card animate-in" data-categories="pcd ti remoto" onclick="openModal('vaga1')">
+                <div class="job-card-header"><div class="job-card-logo">💻</div><div style="flex:1;"><div class="job-card-name">Dev Frontend Sênior</div><div class="job-card-company">TechBrasil S.A.</div></div><span class="badge badge-green">🟢 Ativa</span></div>
+                <div class="job-card-meta"><span>📍 Remoto</span><span>💰 R$ 8k–12k</span><span>⏱️ CLT</span></div>
+                <div class="tts-wrap">
+                  <p class="job-card-desc" id="jv1">Desenvolvimento de interfaces acessíveis com React e TypeScript. Empresa com cultura inclusiva.</p>
+                  <button class="speak-btn" onclick="event.stopPropagation();speakElement('jv1')" aria-label="Ouvir">🔊 Ouvir</button>
+                </div>
+                <div class="job-card-footer"><div class="flex gap-1 flex-wrap"><span class="badge badge-blue">PcD</span><span class="badge badge-purple">React</span></div><button class="btn btn-primary" style="padding:0.4rem 1rem;font-size:0.85rem;" onclick="event.stopPropagation();openModal('vaga1')">Candidatar</button></div>
+              </article>
+              <article class="job-card animate-in" data-categories="neuro design hibrido" onclick="openModal('vaga2')">
+                <div class="job-card-header"><div class="job-card-logo">🎨</div><div style="flex:1;"><div class="job-card-name">Designer UX/UI Pleno</div><div class="job-card-company">Criativa Studio</div></div><span class="badge badge-green">🟢 Ativa</span></div>
+                <div class="job-card-meta"><span>📍 São Paulo · Híbrido</span><span>💰 R$ 5k–7,5k</span></div>
+                <div class="tts-wrap">
+                  <p class="job-card-desc" id="jv2">Criação de experiências digitais inclusivas. Ambiente acolhedor para neurodivergentes com horários flexíveis.</p>
+                  <button class="speak-btn" onclick="event.stopPropagation();speakElement('jv2')" aria-label="Ouvir">🔊 Ouvir</button>
+                </div>
+                <div class="job-card-footer"><div class="flex gap-1 flex-wrap"><span class="badge badge-green">Neurodiversidade</span><span class="badge badge-yellow">Figma</span></div><button class="btn btn-primary" style="padding:0.4rem 1rem;font-size:0.85rem;" onclick="event.stopPropagation();openModal('vaga2')">Candidatar</button></div>
+              </article>
+              <article class="job-card animate-in" data-categories="pcd ti remoto" onclick="openModal('vaga3')">
+                <div class="job-card-header"><div class="job-card-logo">📊</div><div style="flex:1;"><div class="job-card-name">Analista de Dados</div><div class="job-card-company">DataMind Analytics</div></div><span class="badge badge-green">🟢 Ativa</span></div>
+                <div class="job-card-meta"><span>📍 Rio de Janeiro · Remoto</span><span>💰 R$ 6k–9k</span></div>
+                <div class="tts-wrap">
+                  <p class="job-card-desc" id="jv3">Análise de dados e BI. Empresa com intérprete de LIBRAS e infraestrutura 100% acessível.</p>
+                  <button class="speak-btn" onclick="event.stopPropagation();speakElement('jv3')" aria-label="Ouvir">🔊 Ouvir</button>
+                </div>
+                <div class="job-card-footer"><div class="flex gap-1 flex-wrap"><span class="badge badge-blue">PcD</span><span class="badge badge-purple">Python</span><span class="badge badge-blue">SQL</span></div><button class="btn btn-primary" style="padding:0.4rem 1rem;font-size:0.85rem;" onclick="event.stopPropagation();openModal('vaga3')">Candidatar</button></div>
+              </article>
+              <article class="job-card animate-in" data-categories="pcd neuro remoto ti">
+                <div class="job-card-header"><div class="job-card-logo">🔒</div><div style="flex:1;"><div class="job-card-name">Analista de Segurança</div><div class="job-card-company">SecureNet Brasil</div></div><span class="badge badge-green">🟢 Ativa</span></div>
+                <div class="job-card-meta"><span>📍 Remoto</span><span>💰 R$ 7k–10k</span><span>⏱️ PJ</span></div>
+                <div class="tts-wrap">
+                  <p class="job-card-desc" id="jv4">Monitoramento e resposta a incidentes de segurança. Empresa pioneira em contratação de profissionais com TEA.</p>
+                  <button class="speak-btn" onclick="speakElement('jv4')" aria-label="Ouvir">🔊 Ouvir</button>
+                </div>
+                <div class="job-card-footer"><div class="flex gap-1 flex-wrap"><span class="badge badge-blue">PcD</span><span class="badge badge-green">TEA Welcome</span></div><button class="btn btn-primary" style="padding:0.4rem 1rem;font-size:0.85rem;">Candidatar</button></div>
+              </article>
+              <article class="job-card animate-in" data-categories="neuro hibrido">
+                <div class="job-card-header"><div class="job-card-logo">📝</div><div style="flex:1;"><div class="job-card-name">Redator(a) de Conteúdo</div><div class="job-card-company">ConteúdoVivo</div></div><span class="badge badge-green">🟢 Ativa</span></div>
+                <div class="job-card-meta"><span>📍 Belo Horizonte · Híbrido</span><span>💰 R$ 3,5k–5k</span></div>
+                <div class="tts-wrap">
+                  <p class="job-card-desc" id="jv5">Criação de conteúdo para blogs e redes sociais. Ambiente adaptado para pessoas com TDAH e dislexia.</p>
+                  <button class="speak-btn" onclick="speakElement('jv5')" aria-label="Ouvir">🔊 Ouvir</button>
+                </div>
+                <div class="job-card-footer"><div class="flex gap-1 flex-wrap"><span class="badge badge-green">Neurodiversidade</span><span class="badge badge-yellow">TDAH Friendly</span></div><button class="btn btn-primary" style="padding:0.4rem 1rem;font-size:0.85rem;">Candidatar</button></div>
+              </article>
+              <article class="job-card animate-in" data-categories="pcd remoto ti">
+                <div class="job-card-header"><div class="job-card-logo">☁️</div><div style="flex:1;"><div class="job-card-name">Engenheiro(a) Cloud</div><div class="job-card-company">CloudBR Tech</div></div><span class="badge badge-green">🟢 Ativa</span></div>
+                <div class="job-card-meta"><span>📍 Remoto</span><span>💰 R$ 10k–15k</span><span>⏱️ CLT/PJ</span></div>
+                <div class="tts-wrap">
+                  <p class="job-card-desc" id="jv6">Infraestrutura e DevOps em AWS/Azure. Empresa com programa robusto de cotas e suporte a PcD.</p>
+                  <button class="speak-btn" onclick="speakElement('jv6')" aria-label="Ouvir">🔊 Ouvir</button>
+                </div>
+                <div class="job-card-footer"><div class="flex gap-1 flex-wrap"><span class="badge badge-blue">PcD</span><span class="badge badge-purple">AWS</span><span class="badge badge-blue">DevOps</span></div><button class="btn btn-primary" style="padding:0.4rem 1rem;font-size:0.85rem;">Candidatar</button></div>
+              </article>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ===== EMPRESAS ===== -->
+      <div class="page" id="page-empresas">
+        <section class="section">
+          <div class="container">
+            <div class="text-center mb-4 animate-in">
+              <div class="section-label">Para Empresas</div>
+              <h1 class="section-title">Diversidade que gera resultados</h1>
+              <div class="tts-wrap" style="align-items:center;">
+                <p class="section-desc" style="margin:0 auto;" id="emp-desc">Encontre talentos incríveis e cumpra sua responsabilidade social com o apoio do PEVI.</p>
+                <button class="speak-btn" onclick="speakElement('emp-desc')" aria-label="Ouvir">🔊 Ouvir</button>
+              </div>
+            </div>
+            <div class="grid-3 mb-4">
+              <div class="card animate-in text-center">
+                <div class="feature-icon" style="background:#DBEAFE;margin:0 auto 1rem;">📋</div>
+                <h3 style="font-weight:800;margin-bottom:0.5rem;">Publique Vagas</h3>
+                <div class="tts-wrap" style="align-items:center;"><p class="text-muted" id="emp1">Cadastre suas vagas inclusivas gratuitamente e alcance +15.000 candidatos qualificados.</p><button class="speak-btn" onclick="speakElement('emp1')" aria-label="Ouvir">🔊 Ouvir</button></div>
+              </div>
+              <div class="card animate-in text-center">
+                <div class="feature-icon" style="background:#D1FAE5;margin:0 auto 1rem;">🎯</div>
+                <h3 style="font-weight:800;margin-bottom:0.5rem;">Match Inteligente</h3>
+                <div class="tts-wrap" style="align-items:center;"><p class="text-muted" id="emp2">Nosso algoritmo faz o match entre candidatos e vagas considerando habilidades E necessidades de acessibilidade.</p><button class="speak-btn" onclick="speakElement('emp2')" aria-label="Ouvir">🔊 Ouvir</button></div>
+              </div>
+              <div class="card animate-in text-center">
+                <div class="feature-icon" style="background:#FEF3C7;margin:0 auto 1rem;">📜</div>
+                <h3 style="font-weight:800;margin-bottom:0.5rem;">Conformidade Legal</h3>
+                <div class="tts-wrap" style="align-items:center;"><p class="text-muted" id="emp3">Auxílio no cumprimento da Lei de Cotas (Lei 8.213/91) com relatórios e consultoria especializada.</p><button class="speak-btn" onclick="speakElement('emp3')" aria-label="Ouvir">🔊 Ouvir</button></div>
+              </div>
+            </div>
+            <div class="card animate-in" style="background:linear-gradient(135deg,var(--primary-light),var(--bg-card));">
+              <div class="grid-2" style="align-items:center;">
+                <div>
+                  <h2 style="font-family:'Fraunces',serif;font-size:1.8rem;margin-bottom:1rem;">Empresas que confiam no PEVI</h2>
+                  <div class="grid-2" style="gap:1rem;margin-bottom:1.5rem;">
+                    <div style="text-align:center;padding:1rem;background:var(--bg-card);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                      <div style="font-size:1.8rem;font-weight:900;color:var(--primary);">320+</div>
+                      <div class="text-muted" style="font-size:0.85rem;">Empresas parceiras</div>
+                    </div>
+                    <div style="text-align:center;padding:1rem;background:var(--bg-card);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                      <div style="font-size:1.8rem;font-weight:900;color:var(--secondary);">94%</div>
+                      <div class="text-muted" style="font-size:0.85rem;">Taxa de satisfação</div>
+                    </div>
+                  </div>
+                  <button class="btn btn-primary btn-lg" onclick="openModal('empresa-cadastro')">Quero Ser Parceiro</button>
+                </div>
+                <div style="text-align:center;font-size:5rem;opacity:0.3;" aria-hidden="true">🤝</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ===== SOBRE ===== -->
+      <div class="page" id="page-sobre">
+        <section class="section">
+          <div class="container">
+            <div class="grid-2" style="align-items:center;gap:4rem;margin-bottom:4rem;">
+              <div class="animate-in">
+                <div class="section-label">Nossa Missão</div>
+                <h1 class="section-title">Inclusão não é favor, é direito</h1>
+                <div class="tts-wrap">
+                  <p style="color:var(--text-muted);line-height:1.8;margin-bottom:1rem;" id="sobre1">O PEVI nasceu da necessidade de criar uma ponte real entre profissionais com deficiência ou neurodivergência e empresas genuinamente comprometidas com a diversidade.</p>
+                  <button class="speak-btn" onclick="speakElement('sobre1')" aria-label="Ouvir">🔊 Ouvir</button>
+                </div>
+                <div class="tts-wrap" style="margin-top:0.75rem;">
+                  <p style="color:var(--text-muted);line-height:1.8;" id="sobre2">Nossa plataforma foi construída por pessoas com deficiência, para pessoas com deficiência — com acessibilidade integrada em cada funcionalidade.</p>
+                  <button class="speak-btn" onclick="speakElement('sobre2')" aria-label="Ouvir">🔊 Ouvir</button>
+                </div>
+                <div class="flex gap-1 flex-wrap" style="margin-top:1.25rem;">
+                  <span class="badge badge-blue">♿ Acessível por Design</span>
+                  <span class="badge badge-green">🌍 100% Brasileiro</span>
+                  <span class="badge badge-purple">🏆 Certificado ONU</span>
+                </div>
+              </div>
+              <div class="card animate-in" style="text-align:center;padding:3rem;">
+                <div style="font-size:4rem;margin-bottom:1rem;" aria-hidden="true">♿</div>
+                <h2 style="font-family:'Fraunces',serif;font-size:1.5rem;margin-bottom:0.5rem;">Criado com propósito</h2>
+                <p class="text-muted">Fundado em 2022, o PEVI já impactou a vida de mais de 8.700 profissionais em todo o Brasil.</p>
+              </div>
+            </div>
+            <div class="text-center mb-4 animate-in"><h2 class="section-title">Nossos valores</h2></div>
+            <div class="grid-4">
+              <div class="card animate-in text-center"><div style="font-size:2rem;margin-bottom:0.75rem;" aria-hidden="true">❤️</div><h3 style="font-weight:800;font-size:1rem;margin-bottom:0.5rem;">Empatia</h3><p class="text-muted" style="font-size:0.9rem;">Cada decisão é tomada pensando no impacto real na vida das pessoas.</p></div>
+              <div class="card animate-in text-center"><div style="font-size:2rem;margin-bottom:0.75rem;" aria-hidden="true">🔍</div><h3 style="font-weight:800;font-size:1rem;margin-bottom:0.5rem;">Transparência</h3><p class="text-muted" style="font-size:0.9rem;">Comunicação clara e honesta com candidatos e empresas.</p></div>
+              <div class="card animate-in text-center"><div style="font-size:2rem;margin-bottom:0.75rem;" aria-hidden="true">⚡</div><h3 style="font-weight:800;font-size:1rem;margin-bottom:0.5rem;">Inovação</h3><p class="text-muted" style="font-size:0.9rem;">Tecnologia acessível de ponta para quem mais precisa.</p></div>
+              <div class="card animate-in text-center"><div style="font-size:2rem;margin-bottom:0.75rem;" aria-hidden="true">🤝</div><h3 style="font-weight:800;font-size:1rem;margin-bottom:0.5rem;">Parceria</h3><p class="text-muted" style="font-size:0.9rem;">Construímos junto com a comunidade de pessoas com deficiência.</p></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ===== CONTATO ===== -->
+      <div class="page" id="page-contato">
+        <section class="section">
+          <div class="container">
+            <div class="grid-2" style="gap:4rem;align-items:flex-start;">
+              <div class="animate-in">
+                <div class="section-label">Fale Conosco</div>
+                <h1 class="section-title">Estamos aqui para ajudar</h1>
+                <div class="tts-wrap" style="margin-bottom:2rem;">
+                  <p class="section-desc" id="contato-desc">Tem dúvidas, sugestões ou quer saber mais sobre o PEVI? Nossa equipe responde em até 24 horas.</p>
+                  <button class="speak-btn" onclick="speakElement('contato-desc')" aria-label="Ouvir">🔊 Ouvir</button>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:1.25rem;">
+                  <div class="flex align-center gap-1">
+                    <div style="width:44px;height:44px;background:var(--primary-light);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;" aria-hidden="true">📧</div>
+                    <div><div style="font-weight:700;font-size:0.9rem;">E-mail</div><div class="text-muted">contato@pevi.com.br</div></div>
+                  </div>
+                  <div class="flex align-center gap-1">
+                    <div style="width:44px;height:44px;background:var(--primary-light);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;" aria-hidden="true">📱</div>
+                    <div><div style="font-weight:700;font-size:0.9rem;">WhatsApp Acessível</div><div class="text-muted">(11) 99999-0000</div></div>
+                  </div>
+                  <div class="flex align-center gap-1">
+                    <div style="width:44px;height:44px;background:var(--primary-light);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;" aria-hidden="true">🤟</div>
+                    <div><div style="font-weight:700;font-size:0.9rem;">Atendimento em LIBRAS</div><div class="text-muted">Disponível seg. a sex., 9h–18h</div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="card animate-in">
+                <h2 style="font-weight:800;margin-bottom:1.5rem;">Enviar mensagem</h2>
+                <div class="form-group"><label class="form-label" for="contato-nome">Nome completo *</label><input type="text" id="contato-nome" class="form-input" placeholder="Seu nome" required aria-required="true" /></div>
+                <div class="form-group"><label class="form-label" for="contato-email">E-mail *</label><input type="email" id="contato-email" class="form-input" placeholder="seu@email.com" required aria-required="true" /></div>
+                <div class="form-group">
+                  <label class="form-label" for="contato-assunto">Assunto</label>
+                  <select id="contato-assunto" class="form-select">
+                    <option>Dúvidas sobre vagas</option>
+                    <option>Sou empresa e quero ser parceira</option>
+                    <option>Acessibilidade da plataforma</option>
+                    <option>Sugestão</option>
+                    <option>Outro</option>
+                  </select>
+                </div>
+                <div class="form-group"><label class="form-label" for="contato-msg">Mensagem *</label><textarea id="contato-msg" class="form-textarea" placeholder="Como podemos ajudar?" required aria-required="true"></textarea></div>
+                <button class="btn btn-primary" style="width:100%;" onclick="submitContato()">Enviar Mensagem 📨</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo-text">PEVI</div>
+          <p class="footer-desc">Plataforma Especializada em Vagas Inclusivas. Conectando talentos diversos a empresas comprometidas com a diversidade.</p>
+          <div class="footer-badges">
+            <span class="footer-badge">♿ WCAG 2.1 AA</span>
+            <span class="footer-badge">🌟 B Corp</span>
+          </div>
+        </div>
+        <div>
+          <div class="footer-heading">Plataforma</div>
+          <ul class="footer-links">
+            <li><button class="footer-link" onclick="navigate('vagas')">Buscar Vagas</button></li>
+            <li><button class="footer-link" onclick="navigate('empresas')">Para Empresas</button></li>
+            <li><button class="footer-link" onclick="openModal('cadastro')">Cadastrar</button></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-heading">Empresa</div>
+          <ul class="footer-links">
+            <li><button class="footer-link" onclick="navigate('sobre')">Sobre o PEVI</button></li>
+            <li><button class="footer-link" onclick="navigate('contato')">Contato</button></li>
+            <li><a class="footer-link" href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-heading">Acessibilidade</div>
+          <ul class="footer-links">
+            <li><button class="footer-link" onclick="openA11yPanel()">Painel de Acessibilidade</button></li>
+            <li><a class="footer-link" href="#">Política de Privacidade</a></li>
+            <li><a class="footer-link" href="#">Termos de Uso</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2024 PEVI — Todos os direitos reservados</span>
+        <span>Feito com ❤️ para a inclusão</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== MODAIS ===== -->
+  <div class="modal-overlay" id="modal-cadastro" role="dialog" aria-modal="true" aria-labelledby="modal-cad-title">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-cad-title">Criar sua conta no PEVI</h2>
+        <button class="modal-close" onclick="closeModal('cadastro')" aria-label="Fechar">✕</button>
+      </div>
+      <div class="steps mb-4">
+        <div class="step active"><div class="step-circle">1</div><div class="step-label">Dados</div></div>
+        <div class="step"><div class="step-circle">2</div><div class="step-label">Perfil</div></div>
+        <div class="step"><div class="step-circle">3</div><div class="step-label">Pronto</div></div>
+      </div>
+      <div class="form-group"><label class="form-label" for="cad-nome">Nome completo *</label><input type="text" id="cad-nome" class="form-input" placeholder="Seu nome completo" required /></div>
+      <div class="form-group"><label class="form-label" for="cad-email">E-mail *</label><input type="email" id="cad-email" class="form-input" placeholder="seu@email.com" required /></div>
+      <div class="form-group"><label class="form-label" for="cad-senha">Senha *</label><input type="password" id="cad-senha" class="form-input" placeholder="Mínimo 8 caracteres" required /></div>
+      <div class="form-group">
+        <label class="form-label" for="cad-tipo">Você é... *</label>
+        <select id="cad-tipo" class="form-select">
+          <option>Candidato(a) buscando emprego</option>
+          <option>Empresa buscando talentos</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:0.5rem;" onclick="showToast('✅ Conta criada com sucesso!','success');closeModal('cadastro');">Criar Conta Gratuitamente 🚀</button>
+      <p class="text-muted text-center mt-2" style="font-size:0.85rem;">Já tem conta? <a href="#" style="color:var(--primary);font-weight:700;">Entrar</a></p>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-vaga1" role="dialog" aria-modal="true" aria-labelledby="mv1-title">
+    <div class="modal">
+      <div class="modal-header"><h2 class="modal-title" id="mv1-title">Dev Frontend Sênior</h2><button class="modal-close" onclick="closeModal('vaga1')" aria-label="Fechar">✕</button></div>
+      <div class="flex gap-1 flex-wrap mb-2"><span class="badge badge-blue">PcD</span><span class="badge badge-green">Remoto</span><span class="badge badge-purple">CLT</span></div>
+      <p style="font-weight:700;margin-bottom:0.25rem;">TechBrasil S.A. · R$ 8.000 – 12.000/mês</p>
+      <hr class="divider" />
+      <h3 style="font-weight:700;margin-bottom:0.5rem;">Sobre a vaga</h3>
+      <div class="tts-wrap"><p class="text-muted" style="line-height:1.7;margin-bottom:1rem;" id="mv1-desc">Buscamos um(a) desenvolvedor(a) frontend sênior apaixonado(a) por acessibilidade digital. Você implementará componentes acessíveis seguindo as diretrizes WCAG 2.1.</p><button class="speak-btn" onclick="speakElement('mv1-desc')" aria-label="Ouvir descrição da vaga">🔊 Ouvir</button></div>
+      <h3 style="font-weight:700;margin-bottom:0.5rem;margin-top:1rem;">Adaptações disponíveis</h3>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem;">
+        <li>✅ Home office 100%</li><li>✅ Horários flexíveis</li><li>✅ Equipamentos adaptados fornecidos</li><li>✅ Intérprete de LIBRAS em reuniões</li>
+      </ul>
+      <button class="btn btn-primary" style="width:100%;" onclick="showToast('✅ Candidatura enviada!','success');closeModal('vaga1');">Candidatar-me a esta vaga</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-vaga2" role="dialog" aria-modal="true" aria-labelledby="mv2-title">
+    <div class="modal">
+      <div class="modal-header"><h2 class="modal-title" id="mv2-title">Designer UX/UI Pleno</h2><button class="modal-close" onclick="closeModal('vaga2')" aria-label="Fechar">✕</button></div>
+      <div class="flex gap-1 flex-wrap mb-2"><span class="badge badge-green">Neurodiversidade</span><span class="badge badge-yellow">Híbrido</span></div>
+      <p style="font-weight:700;margin-bottom:0.25rem;">Criativa Studio · R$ 5.000 – 7.500/mês</p>
+      <hr class="divider" />
+      <h3 style="font-weight:700;margin-bottom:0.5rem;">Sobre a vaga</h3>
+      <div class="tts-wrap"><p class="text-muted" style="line-height:1.7;" id="mv2-desc">Criação de interfaces intuitivas e acessíveis. Valorizamos perspectivas únicas de profissionais neurodivergentes que enxergam soluções diferenciadas em design.</p><button class="speak-btn" onclick="speakElement('mv2-desc')" aria-label="Ouvir">🔊 Ouvir</button></div>
+      <h3 style="font-weight:700;margin-bottom:0.5rem;margin-top:1rem;">Ambiente inclusivo</h3>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem;">
+        <li>✅ Horários flexíveis para TDAH</li><li>✅ Comunicação assíncrona preferencial</li><li>✅ Sala de descompressão no escritório</li>
+      </ul>
+      <button class="btn btn-primary" style="width:100%;" onclick="showToast('✅ Candidatura enviada!','success');closeModal('vaga2');">Candidatar-me a esta vaga</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-vaga3" role="dialog" aria-modal="true" aria-labelledby="mv3-title">
+    <div class="modal">
+      <div class="modal-header"><h2 class="modal-title" id="mv3-title">Analista de Dados</h2><button class="modal-close" onclick="closeModal('vaga3')" aria-label="Fechar">✕</button></div>
+      <div class="flex gap-1 flex-wrap mb-2"><span class="badge badge-blue">PcD</span><span class="badge badge-purple">Remoto</span></div>
+      <p style="font-weight:700;margin-bottom:0.25rem;">DataMind Analytics · R$ 6.000 – 9.000/mês</p>
+      <hr class="divider" />
+      <h3 style="font-weight:700;margin-bottom:0.5rem;">Sobre a vaga</h3>
+      <div class="tts-wrap"><p class="text-muted" style="line-height:1.7;" id="mv3-desc">Análise de grandes volumes de dados para geração de insights estratégicos. Empresa com infraestrutura 100% acessível e time diverso.</p><button class="speak-btn" onclick="speakElement('mv3-desc')" aria-label="Ouvir">🔊 Ouvir</button></div>
+      <h3 style="font-weight:700;margin-bottom:0.5rem;margin-top:1rem;">Acessibilidade garantida</h3>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem;">
+        <li>✅ Intérprete de LIBRAS em todas as reuniões</li><li>✅ Ferramentas com acessibilidade completa</li><li>✅ Suporte de RH especializado em inclusão</li>
+      </ul>
+      <button class="btn btn-primary" style="width:100%;" onclick="showToast('✅ Candidatura enviada!','success');closeModal('vaga3');">Candidatar-me a esta vaga</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-empresa-cadastro" role="dialog" aria-modal="true" aria-labelledby="memp-title">
+    <div class="modal">
+      <div class="modal-header"><h2 class="modal-title" id="memp-title">Seja uma empresa parceira</h2><button class="modal-close" onclick="closeModal('empresa-cadastro')" aria-label="Fechar">✕</button></div>
+      <div class="form-group"><label class="form-label" for="emp-nome">Nome da empresa *</label><input type="text" id="emp-nome" class="form-input" placeholder="Razão social ou nome fantasia" /></div>
+      <div class="form-group"><label class="form-label" for="emp-cnpj">CNPJ *</label><input type="text" id="emp-cnpj" class="form-input" placeholder="00.000.000/0000-00" /></div>
+      <div class="form-group"><label class="form-label" for="emp-email">E-mail corporativo *</label><input type="email" id="emp-email" class="form-input" placeholder="rh@empresa.com.br" /></div>
+      <div class="form-group">
+        <label class="form-label" for="emp-setor">Setor *</label>
+        <select id="emp-setor" class="form-select"><option>Tecnologia</option><option>Saúde</option><option>Educação</option><option>Financeiro</option><option>Varejo</option><option>Outro</option></select>
+      </div>
+      <button class="btn btn-primary" style="width:100%;" onclick="showToast('✅ Cadastro enviado! Entraremos em contato.','success');closeModal('empresa-cadastro');">Enviar Cadastro</button>
+    </div>
+  </div>
+
+  <!-- ===== PAINEL DE ACESSIBILIDADE ===== -->
+  <div class="a11y-overlay" id="a11y-overlay" onclick="closeA11yPanel()" aria-hidden="true"></div>
+  <aside class="a11y-panel" id="a11y-panel" role="complementary" aria-label="Painel de acessibilidade">
+    <div class="a11y-header">
+      <div class="a11y-title">♿ Acessibilidade</div>
+      <button class="a11y-close" id="a11y-close-btn" onclick="closeA11yPanel()" aria-label="Fechar painel">✕</button>
+    </div>
+
+    <div>
+      <div class="a11y-section-title">Tamanho do Texto</div>
+      <div class="font-size-controls" role="group" aria-label="Tamanho da fonte">
+        <button class="font-btn" data-size="small"  onclick="setFontSize('small')"  aria-label="Fonte pequena">A-</button>
+        <button class="font-btn active" data-size="normal" onclick="setFontSize('normal')" aria-label="Fonte normal">A</button>
+        <button class="font-btn" data-size="large"  onclick="setFontSize('large')"  aria-label="Fonte grande">A+</button>
+        <button class="font-btn" data-size="xlarge" onclick="setFontSize('xlarge')" aria-label="Fonte extra grande">A++</button>
+      </div>
+    </div>
+
+    <div class="a11y-group">
+      <div class="a11y-section-title">Visual</div>
+      <button class="a11y-toggle" id="btn-contrast" onclick="toggleContrast()" aria-pressed="false">
+        <span class="a11y-icon" aria-hidden="true">🔆</span> Alto Contraste
+        <span class="toggle-state">OFF</span>
+      </button>
+      <button class="a11y-toggle" id="btn-dark" onclick="toggleDarkMode()" aria-pressed="false">
+        <span class="a11y-icon" aria-hidden="true">🌙</span> Modo Escuro
+        <span class="toggle-state">OFF</span>
+      </button>
+      <button class="a11y-toggle" id="btn-colorblind" onclick="toggleColorblind()" aria-pressed="false">
+        <span class="a11y-icon" aria-hidden="true">👁️</span> Modo Daltonismo
+        <span class="toggle-state">OFF</span>
+      </button>
+      <button class="a11y-toggle" id="btn-dyslexia" onclick="toggleDyslexia()" aria-pressed="false">
+        <span class="a11y-icon" aria-hidden="true">📖</span> Fonte para Dislexia
+        <span class="toggle-state">OFF</span>
+      </button>
+    </div>
+
+    <div class="a11y-group">
+      <div class="a11y-section-title">Interação</div>
+      <button class="a11y-toggle" id="btn-tts" onclick="toggleGlobalTTS()" aria-pressed="false">
+        <span class="a11y-icon" aria-hidden="true">🔊</span> TTS ao Passar Mouse
+        <span class="toggle-state">OFF</span>
+      </button>
+      <button class="a11y-toggle" id="btn-motion" onclick="toggleMotion()" aria-pressed="false">
+        <span class="a11y-icon" aria-hidden="true">✋</span> Reduzir Movimento
+        <span class="toggle-state">OFF</span>
+      </button>
+      <button class="a11y-toggle" id="btn-links" onclick="toggleLinks()" aria-pressed="false">
+        <span class="a11y-icon" aria-hidden="true">🔗</span> Sublinhar Links
+        <span class="toggle-state">OFF</span>
+      </button>
+      <button class="a11y-toggle" id="btn-cursor" onclick="toggleCursor()" aria-pressed="false">
+        <span class="a11y-icon" aria-hidden="true">🖱️</span> Cursor Grande
+        <span class="toggle-state">OFF</span>
+      </button>
+    </div>
+
+    <button class="a11y-reset" onclick="resetA11y()" aria-label="Redefinir todas as configurações">🔄 Redefinir Configurações</button>
+  </aside>
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+  // ===== STATE =====
+  const state = {
+    currentPage: 'home',
+    a11y: {
+      contrast: 'normal', theme: 'light', fontSize: 'normal',
+      dyslexia: false, motion: false, tts: false, links: false,
+      cursor: false, colorblind: false
+    },
+    ttsHoverActive: false,
+    activeSpeakBtn: null,
+  };
+
+  // ===== ROUTER =====
+  function navigate(pageId, pushState = true) {
+    const currentEl = document.querySelector('.page.active');
+    const nextEl = document.getElementById('page-' + pageId);
+    if (!nextEl || pageId === state.currentPage) return;
+    if (currentEl) { currentEl.classList.remove('active'); currentEl.style.display = 'none'; }
+    nextEl.style.display = 'block';
+    nextEl.offsetHeight; // reflow
+    nextEl.classList.add('active');
+    state.currentPage = pageId;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    updateNavActive(pageId);
+    observeAnimations();
+    if (pushState) history.pushState({ page: pageId }, '', '#' + pageId);
+  }
+
+  function updateNavActive(pageId) {
+    document.querySelectorAll('[data-nav]').forEach(el => {
+      el.classList.toggle('active', el.dataset.nav === pageId);
+    });
+  }
+
+  window.addEventListener('popstate', e => navigate(e.state?.page || 'home', false));
+
+  // ===== A11Y PANEL =====
+  const a11yPanel  = document.getElementById('a11y-panel');
+  const a11yOverlay = document.getElementById('a11y-overlay');
+
+  function openA11yPanel() {
+    a11yPanel.classList.add('open');
+    a11yOverlay.classList.add('open');
+    document.getElementById('a11y-close-btn').focus();
+    document.body.style.overflow = 'hidden';
+    announceToSR('Painel de acessibilidade aberto');
+  }
+  function closeA11yPanel() {
+    a11yPanel.classList.remove('open');
+    a11yOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ---- helpers ----
+  function setToggle(id, active) {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', active);
+    const ts = btn.querySelector('.toggle-state');
+    if (ts) ts.textContent = active ? 'ON' : 'OFF';
+  }
+
+  // ===== FONT SIZE =====
+  function setFontSize(size) {
+    state.a11y.fontSize = size;
+    document.documentElement.dataset.fontSize = size;
+    document.querySelectorAll('.font-btn').forEach(b => b.classList.toggle('active', b.dataset.size === size));
+    saveA11yPrefs();
+    announceToSR('Tamanho de fonte: ' + size);
+  }
+
+  // ===== CONTRAST =====
+  function toggleContrast() {
+    const on = state.a11y.contrast !== 'high';
+    state.a11y.contrast = on ? 'high' : 'normal';
+    document.documentElement.dataset.contrast = on ? 'high' : '';
+    setToggle('btn-contrast', on);
+    saveA11yPrefs();
+    announceToSR(on ? 'Alto contraste ativado' : 'Contraste normal ativado');
+  }
+
+  // ===== DARK MODE =====
+  function toggleDarkMode() {
+    const on = state.a11y.theme !== 'dark';
+    state.a11y.theme = on ? 'dark' : 'light';
+    document.documentElement.dataset.theme = on ? 'dark' : '';
+    setToggle('btn-dark', on);
+    saveA11yPrefs();
+    announceToSR(on ? 'Modo escuro ativado' : 'Modo claro ativado');
+  }
+
+  // ===== COLORBLIND =====
+  function toggleColorblind() {
+    state.a11y.colorblind = !state.a11y.colorblind;
+    document.documentElement.dataset.colorblind = state.a11y.colorblind ? 'on' : '';
+    setToggle('btn-colorblind', state.a11y.colorblind);
+    saveA11yPrefs();
+    announceToSR(state.a11y.colorblind ? 'Modo daltonismo ativado (paleta acessível)' : 'Cores normais restauradas');
+  }
+
+  // ===== DYSLEXIA =====
+  function toggleDyslexia() {
+    state.a11y.dyslexia = !state.a11y.dyslexia;
+    document.documentElement.dataset.dyslexia = state.a11y.dyslexia ? 'on' : '';
+    setToggle('btn-dyslexia', state.a11y.dyslexia);
+    saveA11yPrefs();
+    announceToSR(state.a11y.dyslexia ? 'Fonte para dislexia ativada' : 'Fonte normal restaurada');
+  }
+
+  // ===== MOTION =====
+  function toggleMotion() {
+    state.a11y.motion = !state.a11y.motion;
+    document.documentElement.dataset.motion = state.a11y.motion ? 'reduced' : '';
+    setToggle('btn-motion', state.a11y.motion);
+    saveA11yPrefs();
+    announceToSR(state.a11y.motion ? 'Movimento reduzido ativado' : 'Movimento normal restaurado');
+  }
+
+  // ===== LINKS =====
+  function toggleLinks() {
+    state.a11y.links = !state.a11y.links;
+    document.documentElement.dataset.links = state.a11y.links ? 'underline' : '';
+    setToggle('btn-links', state.a11y.links);
+    saveA11yPrefs();
+    announceToSR(state.a11y.links ? 'Sublinhado de links ativado' : 'Sublinhado de links desativado');
+  }
+
+  // ===== CURSOR =====
+  function toggleCursor() {
+    state.a11y.cursor = !state.a11y.cursor;
+    document.body.style.cursor = state.a11y.cursor
+      ? `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M0 0 L0 28 L8 20 L14 32 L18 30 L12 18 L24 18 Z' fill='%232563EB' stroke='white' stroke-width='2'/%3E%3C/svg%3E") 0 0, auto`
+      : '';
+    setToggle('btn-cursor', state.a11y.cursor);
+    saveA11yPrefs();
+    announceToSR(state.a11y.cursor ? 'Cursor grande ativado' : 'Cursor normal restaurado');
+  }
+
+  // ===== GLOBAL TTS (hover) =====
+  let ttsHoverHandler = null;
+  function toggleGlobalTTS() {
+    state.a11y.tts = !state.a11y.tts;
+    setToggle('btn-tts', state.a11y.tts);
+    if (state.a11y.tts) {
+      showToast('🔊 TTS ativado — passe o mouse sobre parágrafos e títulos', 'info');
+      ttsHoverHandler = e => {
+        const el = e.target.closest('p,h1,h2,h3,li,blockquote');
+        if (el) { stopTTS(); speakText(el.textContent); }
+      };
+      document.addEventListener('mouseover', ttsHoverHandler);
+    } else {
+      stopTTS();
+      if (ttsHoverHandler) { document.removeEventListener('mouseover', ttsHoverHandler); ttsHoverHandler = null; }
+      showToast('🔇 TTS desativado', 'info');
+    }
+    saveA11yPrefs();
+    announceToSR(state.a11y.tts ? 'Leitura por hover ativada' : 'Leitura por hover desativada');
+  }
+
+  // ===== RESET =====
+  function resetA11y() {
+    state.a11y = { contrast:'normal', theme:'light', fontSize:'normal', dyslexia:false, motion:false, tts:false, links:false, cursor:false, colorblind:false };
+    ['contrast','theme','dyslexia','motion','links','colorblind','fontSize'].forEach(k => {
+      if (k === 'fontSize') document.documentElement.dataset.fontSize = 'normal';
+      else document.documentElement.removeAttribute('data-' + k);
+    });
+    document.body.style.cursor = '';
+    stopTTS();
+    if (ttsHoverHandler) { document.removeEventListener('mouseover', ttsHoverHandler); ttsHoverHandler = null; }
+    ['btn-contrast','btn-dark','btn-colorblind','btn-dyslexia','btn-tts','btn-motion','btn-links','btn-cursor'].forEach(id => setToggle(id, false));
+    document.querySelectorAll('.font-btn').forEach(b => b.classList.toggle('active', b.dataset.size === 'normal'));
+    localStorage.removeItem('pevi-a11y');
+    showToast('✅ Configurações redefinidas', 'success');
+    announceToSR('Todas as configurações de acessibilidade foram redefinidas');
+  }
+
+  // ===== PERSIST =====
+  function saveA11yPrefs() {
+    try { localStorage.setItem('pevi-a11y', JSON.stringify(state.a11y)); } catch(e) {}
+  }
+  function loadA11yPrefs() {
+    try {
+      const saved = localStorage.getItem('pevi-a11y');
+      if (!saved) return;
+      const p = JSON.parse(saved);
+      Object.assign(state.a11y, p);
+      if (p.contrast === 'high') document.documentElement.dataset.contrast = 'high';
+      if (p.theme === 'dark') document.documentElement.dataset.theme = 'dark';
+      if (p.colorblind) document.documentElement.dataset.colorblind = 'on';
+      if (p.dyslexia) document.documentElement.dataset.dyslexia = 'on';
+      if (p.motion) document.documentElement.dataset.motion = 'reduced';
+      if (p.links) document.documentElement.dataset.links = 'underline';
+      document.documentElement.dataset.fontSize = p.fontSize || 'normal';
+      if (p.contrast === 'high') setToggle('btn-contrast', true);
+      if (p.theme === 'dark') setToggle('btn-dark', true);
+      if (p.colorblind) setToggle('btn-colorblind', true);
+      if (p.dyslexia) setToggle('btn-dyslexia', true);
+      if (p.motion) setToggle('btn-motion', true);
+      if (p.links) setToggle('btn-links', true);
+      if (p.cursor) { setToggle('btn-cursor', true); toggleCursor(); }
+      document.querySelectorAll('.font-btn').forEach(b => b.classList.toggle('active', b.dataset.size === (p.fontSize || 'normal')));
+    } catch(e) {}
+  }
+
+  // ===== TTS ENGINE =====
+  function speakText(text) {
+    if (!text || !text.trim()) return;
+    stopTTS();
+    const utt = new SpeechSynthesisUtterance(text.trim().substring(0, 500));
+    utt.lang = 'pt-BR'; utt.rate = 0.9; utt.pitch = 1; utt.volume = 1;
+    const voices = speechSynthesis.getVoices();
+    const ptVoice = voices.find(v => v.lang.startsWith('pt'));
+    if (ptVoice) utt.voice = ptVoice;
+    utt.onend = () => { if (state.activeSpeakBtn) { state.activeSpeakBtn.classList.remove('speaking'); state.activeSpeakBtn.textContent = '🔊 Ouvir'; state.activeSpeakBtn = null; } };
+    speechSynthesis.speak(utt);
+  }
+
+  function speakElement(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    // Find the speak button that called this (within same tts-wrap)
+    const wrap = el.closest('.tts-wrap') || el.parentElement;
+    const btn = wrap ? wrap.querySelector('.speak-btn') : null;
+
+    // If already speaking this, stop
+    if (state.activeSpeakBtn === btn && speechSynthesis.speaking) {
+      stopTTS(); return;
+    }
+
+    // Reset previous btn
+    if (state.activeSpeakBtn) { state.activeSpeakBtn.classList.remove('speaking'); state.activeSpeakBtn.textContent = '🔊 Ouvir'; }
+
+    state.activeSpeakBtn = btn;
+    if (btn) { btn.classList.add('speaking'); btn.textContent = '⏹ Parar'; }
+
+    speakText(el.textContent);
+  }
+
+  function stopTTS() {
+    speechSynthesis.cancel();
+    if (state.activeSpeakBtn) {
+      state.activeSpeakBtn.classList.remove('speaking');
+      state.activeSpeakBtn.textContent = '🔊 Ouvir';
+      state.activeSpeakBtn = null;
+    }
+  }
+
+  // ===== SR ANNOUNCE =====
+  function announceToSR(msg) {
+    const r = document.getElementById('sr-announce');
+    if (!r) return;
+    r.textContent = '';
+    setTimeout(() => r.textContent = msg, 50);
+  }
+
+  // ===== TOAST =====
+  function showToast(message, type = 'info', duration = 3500) {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    const icons = { success:'✅', error:'❌', info:'ℹ️' };
+    const toast = document.createElement('div');
+    toast.className = 'toast ' + type;
+    toast.innerHTML = `<span>${icons[type]||'ℹ️'}</span><span>${message}</span>`;
+    toast.setAttribute('role','alert');
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.style.animation = 'toastIn 0.3s ease reverse forwards';
+      setTimeout(() => toast.remove(), 300);
+    }, duration);
+  }
+
+  // ===== ANIMATIONS =====
+  function observeAnimations() {
+    const els = document.querySelectorAll('.animate-in:not(.visible)');
+    if (!els.length) return;
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+  }
+
+  // ===== COUNTERS =====
+  function animateCounter(el) {
+    const target = parseInt(el.dataset.target, 10);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1500;
+    const start = performance.now();
+    function update(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(ease * target) + suffix;
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+  function observeCounters() {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting && !e.target.classList.contains('counted')) { e.target.classList.add('counted'); animateCounter(e.target); obs.unobserve(e.target); } });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('[data-target]').forEach(c => obs.observe(c));
+  }
+
+  // ===== MOBILE NAV =====
+  function toggleMobileNav() {
+    document.getElementById('mobile-nav')?.classList.toggle('open');
+    const btn = document.getElementById('hamburger');
+    if (btn) { const open = btn.classList.toggle('open'); btn.setAttribute('aria-expanded', open); }
+  }
+
+  // ===== MODAL =====
+  function openModal(id) {
+    const m = document.getElementById('modal-' + id);
+    if (m) { m.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  }
+  function closeModal(id) {
+    const m = document.getElementById('modal-' + id);
+    if (m) { m.classList.remove('open'); document.body.style.overflow = ''; }
+  }
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', e => { if (e.target === overlay) { overlay.classList.remove('open'); document.body.style.overflow = ''; } });
+  });
+
+  // ===== FILTER / SEARCH =====
+  function setFilter(btn, filter) {
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    filterJobs();
+  }
+  function filterJobs() {
+    const query = (document.getElementById('search-jobs')?.value || '').toLowerCase();
+    const activeFilter = document.querySelector('.filter-chip.active')?.dataset.filter || 'all';
+    const cards = document.querySelectorAll('.job-card[data-categories]');
+    let shown = 0;
+    cards.forEach(card => {
+      const text = card.textContent.toLowerCase();
+      const cats = card.dataset.categories || '';
+      const show = (!query || text.includes(query)) && (activeFilter === 'all' || cats.includes(activeFilter));
+      card.style.display = show ? '' : 'none';
+      if (show) shown++;
+    });
+    const count = document.getElementById('jobs-count');
+    if (count) count.textContent = shown + ' vaga' + (shown !== 1 ? 's' : '') + ' encontrada' + (shown !== 1 ? 's' : '');
+  }
+
+  // ===== FORM =====
+  function submitContato() {
+    const nome  = document.getElementById('contato-nome')?.value.trim();
+    const email = document.getElementById('contato-email')?.value.trim();
+    if (!nome || !email) { showToast('❌ Preencha os campos obrigatórios', 'error'); return; }
+    showToast('✅ Mensagem enviada! Responderemos em breve.', 'success');
+  }
+
+  // ===== KEYBOARD =====
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeA11yPanel();
+      document.querySelectorAll('.modal-overlay.open').forEach(m => { m.classList.remove('open'); document.body.style.overflow = ''; });
+      stopTTS();
+    }
+  });
+
+  // ===== INIT =====
+  document.addEventListener('DOMContentLoaded', () => {
+    loadA11yPrefs();
+    observeAnimations();
+    observeCounters();
+    const hash = window.location.hash.replace('#', '');
+    if (hash && document.getElementById('page-' + hash)) navigate(hash, false);
+    else { document.getElementById('page-home').classList.add('active'); document.getElementById('page-home').style.display = 'block'; }
+    speechSynthesis.addEventListener('voiceschanged', () => {});
+  });
+  </script>
+</body>
+</html>
